@@ -9,16 +9,16 @@ class Page1 extends StatefulWidget {
 }
 
 class _Page1State extends State<Page1> {
-  var email ;
+  String email='' ;
   getcachedEmail() async{
     SharedPreferences prefs=await SharedPreferences.getInstance();
-    email=prefs.getString('Email')??'';
+    email=prefs.getString('Email')??'__';
     
 
     setState(() {});
 
   }
-  void initstate(){
+  void initState(){
     super.initState();
     getcachedEmail();
   }

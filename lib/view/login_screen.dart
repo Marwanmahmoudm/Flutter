@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:untitled3/home_screen.dart';
+import 'package:untitled3/view/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -65,11 +65,11 @@ class _LoginscreenState extends State<Loginscreen> {
                     height: 50.0,
                     width: 300.0,
 
-                    child: MaterialButton(onPressed: (){
-                      saveprefs() async{
+                    child: MaterialButton(onPressed: ()async{
+
                         SharedPreferences prefs=await SharedPreferences.getInstance();
                         prefs.setString('Email',emailController.text);
-                      }
+
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => Home_screen(email:emailController.text ,),)
