@@ -16,9 +16,8 @@ class _Page2State extends State<Page2> {
   
   getmytodos()async{
     todos=await TodosService(). gettodo();
+    isLoading=false;
     setState(() {
-      isLoading=false;
-
     });
 
   }
