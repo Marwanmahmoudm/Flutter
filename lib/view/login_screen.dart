@@ -1,3 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled3/view/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,6 +17,7 @@ class _LoginscreenState extends State<Loginscreen> {
 
   final _formKey = GlobalKey<FormState>();
   TextEditingController emailController=TextEditingController();
+  TextEditingController passwoedController=TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -46,6 +50,7 @@ class _LoginscreenState extends State<Loginscreen> {
                 ),
                 SizedBox(height: 30.0,),
                 TextFormField(
+                  controller: passwoedController,
                   autovalidateMode:AutovalidateMode.always ,
                   validator: (value){
                   if (value == null || value.length<8){
@@ -66,19 +71,24 @@ class _LoginscreenState extends State<Loginscreen> {
                     width: 300.0,
 
                     child: MaterialButton(onPressed: ()async{
+                     bool result=await fireBaselogin(emailController.text,passwoedController.text);
+                     if(result==true)
+                       { SharedPreferences prefs = await SharedPreferences
+                            .getInstance();
+                        prefs.setString('Email', emailController.text);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) =>
+                                Home_screen(email: emailController.text,),)
+                        );}
 
-                        SharedPreferences prefs=await SharedPreferences.getInstance();
-                        prefs.setString('Email',emailController.text);
+                        else {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(
+                                  'Login Field'
+                              )));
+                        }
 
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Home_screen(email:emailController.text ,),)
-                      );
-                      if(_formKey.currentState!.validate()){
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(
-                          'Succes Data'
-                        )));
-                      }
                     },
                       child: Text(
                         'Login',
@@ -123,5 +133,24 @@ class _LoginscreenState extends State<Loginscreen> {
 
       ),
     );
+  }
+  Future<bool> fireBaselogin(String email,String password) async {
+    try{
+      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email:email ,
+          password:password
+      );
+    if(userCredential.user !=null){
+      return true;
+    }
+
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+      }
+    }
+    return false;
   }
 }
