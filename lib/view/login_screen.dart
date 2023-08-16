@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled3/view/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:untitled3/view/singup_screen.dart';
 
 
 class Loginscreen extends StatefulWidget {
@@ -112,7 +113,14 @@ class _LoginscreenState extends State<Loginscreen> {
                   color: Colors.grey,
                   height: 50.0,
                   width: 300.0,
-                  child: MaterialButton(onPressed: (){},
+                  child: MaterialButton(onPressed: (){
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) =>
+                        Singupscreen(),)
+                    );
+
+                  },
                     child: Text(
                       'No Account? sin up',
                       style: TextStyle(
